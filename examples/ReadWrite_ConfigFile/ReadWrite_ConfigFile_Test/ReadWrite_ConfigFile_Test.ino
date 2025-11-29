@@ -56,7 +56,7 @@ char configFileName2[] = "test_file2.txt";
 // Define some variables which we will set using the
 // values from the SD card configuration file
 int intValue = 0;
-
+long longValue = 0;
 /**
  * Setup function
  */
@@ -85,9 +85,11 @@ void setup() {
     // Use the "read" method and supply the directory and file name
     while (configFile.read(configFileName))
     {
-        configFile.get("IntValue", intValue);
+        configFile.get("intValue", intValue);
+        configFile.get("longValue", longValue);
     }
-    Serial.print("IntValue: "); Serial.println(intValue);
+    Serial.print("intValue: "); Serial.println(intValue);
+    Serial.print("longValue: "); Serial.println(longValue);
 }
 
 
