@@ -67,13 +67,12 @@ SdConfigFile::SdConfigFile(uint8_t chipSelectPin) : chipSelect(chipSelectPin) {
 bool SdConfigFile::openConfigFile(const char* fileName) {
 
 	// Try connecting to the SD card
-	if (!sd.begin(chipSelect)) {
-		sd.initErrorPrint(&Serial);
+	if (!SD.begin(chipSelect)) {
+		SD.sdfs.initErrorPrint(&Serial);
 		return false;
 	}
-
 	// Check that the file exists
-	if (!sd.exists(fileName)) {
+	if (!SD.exists(fileName)) {
 		Serial.println(F("Config file not found"));
 		return false;
 	}
@@ -82,11 +81,10 @@ bool SdConfigFile::openConfigFile(const char* fileName) {
 	if (origFile) origFile.close();
 
 	// Try opening the file
-	if (!origFile.open(fileName, FILE_READ)) {
+	if (!(origFile = SD.open(fileName, FILE_READ))) {
 		Serial.println(F("Can't open the config file"));
 		return false;
 	}
-
 	commentActive = false;
 	lineOverflow = false;
 	return true;
@@ -105,8 +103,8 @@ bool SdConfigFile::openTempFile() {
 	for (int i = 0; i < 3; i++) {
 
 		// Try connecting to the SD card
-		if (!sd.begin(chipSelect)) {
-			sd.initErrorPrint(&Serial);
+		if (!SD.begin(chipSelect)) {
+			SD.sdfs.initErrorPrint(&Serial);
 			continue;
 		}
 
@@ -115,12 +113,12 @@ bool SdConfigFile::openTempFile() {
 		lineBuffer[6] = '\0';
 
 		// Check that the file exists
-		if (sd.exists(lineBuffer)) {
-			if (!sd.remove(lineBuffer)) continue;
+		if (SD.exists(lineBuffer)) {
+			if (!SD.remove(lineBuffer)) continue;
 		}
 
 		// Try opening the file
-		if (!tempFile.open(lineBuffer, FILE_WRITE)) {
+		if (!(tempFile = SD.open(lineBuffer, FILE_WRITE_BEGIN))) {
 			Serial.println(F("Unable to open temporary file"));
 			continue;
 		}
@@ -128,7 +126,7 @@ bool SdConfigFile::openTempFile() {
 		// Open and close file to create it
 		tempFile.print("");
 		tempFile.close();
-		tempFile.open(lineBuffer, FILE_WRITE);
+		tempFile = SD.open(lineBuffer, FILE_WRITE);
 
 		return true;
 	}
@@ -145,23 +143,22 @@ bool SdConfigFile::openTempFile() {
 bool SdConfigFile::readConfigLine() {
 
 	if (origFile) {
-
 		while (origFile.available()) {
 
 			printLineToFile();
 
 			// Read in a new line - Note: removes '\r' but leaves '\n'
-			int bufferLength = origFile.fgets(lineBuffer, sizeof(lineBuffer));
+			int bufferLength = origFile.read(lineBuffer, sizeof(lineBuffer));
 			lineOverflow = true;
 			equalsSplit = false;
 			currentPos = lineBuffer;
-
+Serial.printf("lineBuffer = %s\n",lineBuffer);
 			// Line needs to be at least three characters in length to be valid
 			// (eg. v=1) Lines shorted than this can't contain any useful info
 			if (bufferLength > 3) {
 
 				// Check that no line overflow has occurred
-				if (lineBuffer[bufferLength - 1] == '\n') {
+				if ((lineBuffer[bufferLength - 1] == '\n')) { // || (lineBuffer[bufferLength - 1] == '\0')) {
 					lineOverflow = false;
 				}
 
@@ -202,12 +199,11 @@ bool SdConfigFile::readConfigLine() {
 
 
 /**
- * Print data to temporary file
+ * Print data to temporary file if tempFile and currentPos.
  */
 void SdConfigFile::printLineToFile() {
-	if (tempFile && currentPos != NULL) {
+	if ((tempFile) && (currentPos != NULL)) {
 		tempFile.print(currentPos);
-
 		if (equalsSplit) {                  // If the line was already split
 			currentPos = strtok(NULL, "="); // Get the value on other side of the equals sign
 			checkItemName("");              // Strips spaces, etc. from the value
@@ -231,12 +227,10 @@ bool SdConfigFile::read(const char* fileName, void (*callbackFunction)()) {
 
 	// While we have data left to read in the file
 	while (origFile) {
-
 		if (readConfigLine()) {
 			// Raise the callback function
 			if (currentPos) callbackFunction();
 		}
-
 	}
 
 	return true;
@@ -250,15 +244,12 @@ bool SdConfigFile::read(const char* fileName, void (*callbackFunction)()) {
  * @return     True if there is still data to read, false if finished reading file
  */
 bool SdConfigFile::read(const char* fileName) {
-
 	if (!origFile) openConfigFile(fileName);
-
 	while (origFile) {
 		if (readConfigLine()) {
 			if (currentPos) return true;
 		}
 	}
-
 	return false;
 }
 
@@ -280,7 +271,9 @@ bool SdConfigFile::write(const char* fileName) {
 		writeAppend = false;
 		currentPos = NULL;
 	}
+Serial.printf("===========fileName = %s/n",fileName);
 
+while(1){;}
 	if (!writeAppend) {
 
 		// Open up the configuration file
@@ -307,8 +300,9 @@ bool SdConfigFile::write(const char* fileName) {
 	}
 
 	// Delete the original configuration file and rename the temporary file
-	if (!sd.exists(fileName) || sd.remove(fileName)) {
-		if (!tempFile.rename(fileName)) {
+	if (!SD.exists(fileName) || SD.remove(fileName)) {
+//		if (!tempFile.rename(fileName)) {
+		if (!SD.rename(tempFile.name(),fileName)) {
 			Serial.println(F("Unable to rename temporary file"));
 		}
 	}
@@ -351,7 +345,6 @@ bool SdConfigFile::write(const char* fileName, void (*callbackFunction)()) {
  * @return     True if the names match, false otherwise
  */
 bool SdConfigFile::checkItemName(const char *itemName) {
-
 	// If a matching parameter has already been found, no need to check again
 	if (paramFound) return false;
 

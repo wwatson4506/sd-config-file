@@ -44,7 +44,8 @@
 #define SD_CONFIG_FILE_HPP
 
 
-#include <SdFat.h>
+//#include <SdFat.h>
+#include <SD.h>
 
 
 // The number of digits shown after the decimal
@@ -59,7 +60,7 @@
 // config file are longer than 40 characters, the
 // length of the buffer can be changed here
 #ifndef SDCONFIG_BUFFER_LENGTH
-#define SDCONFIG_BUFFER_LENGTH (40)
+#define SDCONFIG_BUFFER_LENGTH 128//(40)
 #endif /* SDCONFIG_BUFFER_LENGTH */
 
 
@@ -118,6 +119,9 @@ private:
 
 	// Choose the SD file system type depending
 	// on which definitions user has supplied
+    File origFile = NULL;
+    File tempFile = NULL;
+/*
 #if defined(SD_CONFIG_FILE_USE_EXFAT)
 	SdExFat sd;
 	ExFile origFile;
@@ -126,12 +130,12 @@ private:
 	SdFs sd;
 	FsFile origFile;
 	FsFile tempFile;
-#else /* SD_CONFIG_FILE_USE_FAT32 */
+#else // SD_CONFIG_FILE_USE_FAT32
 	SdFat32 sd;
 	File32 origFile;
 	File32 tempFile;
 #endif
-
+*/
 	// Buffer used to store each line from the config file
 	char lineBuffer[SDCONFIG_BUFFER_LENGTH];
 
