@@ -3,6 +3,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/chillibasket/SdConfigFile.svg?style=flat)](https://github.com/chillibasket/SdConfigFile/commits/master)
 
 # SD Card Configuration File Library
+# Modified for Teensy 4.1
 SdConfigFile is an Arduino library to read and write configuration files on a SD card.
 <br />
 
@@ -19,10 +20,14 @@ If you have any questions or suggestion, feel free to open a new GitHub "Issue".
 <br />
 
 
-## Installation
-1. In GitHub, click on the `Code > Download Zip` button.
-2. In the Arduino IDE, click on `Sketch > Include Library > Add .ZIP Library...` and select the downloaded zip file.
-3. The library should now be installed. To open the example sketch, click on `File > Examples > SdConfigFile > ReadWrite_ConfigFile`.
+## Installation for Teensy 4.1
+1. This branch of the library is setup and tested for Teensyduino 1.60B5. May work with some earlier versions.
+2. In GitHub, click on the `Code > Download Zip` button.
+3. In the Arduino IDE, click on `Sketch > Include Library > Add .ZIP Library...` and select the downloaded zip file.
+4. Two files located in the extras folder need to be installed:
+   a. File "extras/FS.h" needs to replace the one in "cores/teensy4"
+   b. File "extras/SD.h" needs to replace the one in "libraries/SD"
+5. The library should now be installed. To open the example sketch, click on `File > Examples > SdConfigFile > ReadWrite_ConfigFile` or readwrite_ConfigFile_MTP_littleFS.
 <br />
 <br />
 
@@ -51,6 +56,7 @@ BoolValue2=0
 boolValue3=false
 
 ```
+This is the contents of "test_file.txt" found in the "extras" folder that is put on an SDcard for testing.
 
 The supported data types which can be written to and read from the configuration file are:
 * Integer value (int)
@@ -211,7 +217,7 @@ The *Callback Function* method has the benefit that it returns either `True` or 
 
 
 ## Tested devices:
-* Teensy 3.6
+* Teensy 3.6 / Teensy 4.1
 * (More coming soon)
 * Let me know if you have tested it on any other devices
 <br />
@@ -219,6 +225,11 @@ The *Callback Function* method has the benefit that it returns either `True` or 
 
 
 ## Change Log
+* **Version 1.1.1 [1st December 2025]
+    1. Added support for Teensy 4.1
+    2. Added support for MTP which allows for SD card file editing.
+    3. Updated to support latest (1.60B5) versions of Teensyduino with fgets() support.
+    4. Added example for MTP usage.
 * **Version 0.1.1** [27th February 2022]
     1. Added support for file names using the Arduino `String` variable name.
     2. Added option to create a new file if no configuration file with the specified name exists yet.
