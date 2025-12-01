@@ -60,7 +60,7 @@
 // config file are longer than 40 characters, the
 // length of the buffer can be changed here
 #ifndef SDCONFIG_BUFFER_LENGTH
-#define SDCONFIG_BUFFER_LENGTH 128//(40)
+#define SDCONFIG_BUFFER_LENGTH 80//(40)
 #endif /* SDCONFIG_BUFFER_LENGTH */
 
 
