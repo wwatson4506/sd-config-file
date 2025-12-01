@@ -121,21 +121,7 @@ private:
 	// on which definitions user has supplied
     File origFile = NULL;
     File tempFile = NULL;
-/*
-#if defined(SD_CONFIG_FILE_USE_EXFAT)
-	SdExFat sd;
-	ExFile origFile;
-	ExFile tempFile;
-#elif defined(SD_CONFIG_FILE_USE_FSFAT)
-	SdFs sd;
-	FsFile origFile;
-	FsFile tempFile;
-#else // SD_CONFIG_FILE_USE_FAT32
-	SdFat32 sd;
-	File32 origFile;
-	File32 tempFile;
-#endif
-*/
+
 	// Buffer used to store each line from the config file
 	char lineBuffer[SDCONFIG_BUFFER_LENGTH];
 

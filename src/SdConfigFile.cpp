@@ -102,12 +102,6 @@ bool SdConfigFile::openTempFile() {
 	// Attempt to open temporary file 3 times before throwing an error
 	for (int i = 0; i < 3; i++) {
 
-//		// Try connecting to the SD card
-//		if (!SD.begin(chipSelect)) {
-//			SD.sdfs.initErrorPrint(&Serial);
-//			continue;
-//		}
-
 		strcpy(lineBuffer, "_temp");
 		lineBuffer[5] = i;
 		lineBuffer[6] = '\0';
