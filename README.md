@@ -25,8 +25,8 @@ If you have any questions or suggestion, feel free to open a new GitHub "Issue".
 2. In GitHub, click on the `Code > Download Zip` button.
 3. In the Arduino IDE, click on `Sketch > Include Library > Add .ZIP Library...` and select the downloaded zip file.
 4. Two files located in the extras folder need to be installed:
-   a. File "extras/FS.h" needs to replace the one in "cores/teensy4"
-   b. File "extras/SD.h" needs to replace the one in "libraries/SD"
+   1. File "extras/FS.h" needs to replace the one in "cores/teensy4"
+   2. File "extras/SD.h" needs to replace the one in "libraries/SD"
 5. The library should now be installed. To open the example sketch, click on `File > Examples > SdConfigFile > ReadWrite_ConfigFile` or readwrite_ConfigFile_MTP_littleFS.
 <br />
 <br />
