@@ -29,6 +29,7 @@ If you have any questions or suggestion, feel free to open a new GitHub "Issue".
    2. File "extras/SD.h" needs to replace the one in "libraries/SD"
    3. File "test_file.txt" need to be added to an SDcard that will be used for testing.
 5. The library should now be installed. To open the example sketch, click on `File > Examples > SdConfigFile > ReadWrite_ConfigFile` or readwrite_ConfigFile_MTP_littleFS.
+6. You can set the line buffer size in file "SdConfigFile.h" at line #63. Defalt size is now 254 bytes.
 <br />
 <br />
 
