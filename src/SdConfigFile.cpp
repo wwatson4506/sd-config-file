@@ -14,7 +14,11 @@
  *            all SD card operations; this library needs to 
  *            be installed first: https://github.com/greiman/SdFat
  *
- * * * * * * * * * * * * * * * * * * * * * * */
+ ***********************************************************************
+ *            This branch updated 12-01-25 for use with the Teensy 4.1
+ *            and Teensyduino 1.60 beta 5. @wwatson, @mjs513
+ *            Requires including "SD.h". "SdFat.h" is not included.
+ ***********************************************************************/
 
 /**
  * MIT License
