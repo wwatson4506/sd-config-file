@@ -112,7 +112,7 @@ bool SdConfigFile::openTempFile() {
 		}
 
 		// Try opening the file
-		if (!(tempFile = SD.open(lineBuffer, FILE_WRITE_BEGIN))) {
+		if (!(tempFile = SD.open(lineBuffer, FILE_WRITE))) {
 			Serial.println(F("Unable to open temporary file"));
 			continue;
 		}
